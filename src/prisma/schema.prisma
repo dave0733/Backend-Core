@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type Metoken {
+  address String
+  name    String
+  symbol  String
+}
+
+type Service {
+  publicProfileId String
+  orbisId         String
+  name            String
+  description     String
+  availability    String
+  cost            Float
+  token           String
+}
+
+enum TransactionType {
+  BUY
+  SELL
+  SPEND
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model PublicProfile {
+  // DB Relations
+  user        User      @relation(fields: [userId], references: [id])
+  // Keys (id and other uniques)
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String    @unique @db.ObjectId
+  // DB Fields
+  address     String    @unique
+  ens         String    @unique
+  username    String
+  description String
+  pfp         String
+  cover       String
+  services    Service[]
+  metoken     Metoken
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+}
+
+model User {
+  // DB Relations
+  publicProfile    PublicProfile?
+  // Keys (id and other uniques)
+  id               String         @id @default(auto()) @map("_id") @db.ObjectId
+  // DB Fields
+  role             Role           @default(USER)
+  email            String
+  isPriorityUser   Boolean
+  priorityRank     Int            @default(-1)
+  messageThreshold String
+  gateToken        String
+  notifications    String[]
+  attributes       Json
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now())
+}
+
+model Transaction {
+  // DB Relations
+  // Keys (id and other uniques)
+  id      String          @id @default(auto()) @map("_id") @db.ObjectId
+  // DB Fields
+  to      String
+  from    String
+  hash    String
+  chainId Int
+  status  String
+  type    TransactionType
+}
