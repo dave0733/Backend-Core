@@ -63,13 +63,14 @@ model User {
   id               String         @id @default(auto()) @map("_id") @db.ObjectId
   // DB Fields
   role             Role           @default(USER)
-  email            String
-  isPriorityUser   Boolean
+  address          String         @unique
+  email            String         @unique
+  isPriorityUser   Boolean        @default(false)
   priorityRank     Int            @default(-1)
-  messageThreshold String
-  gateToken        String
+  messageThreshold String         @default("0")
+  gateToken        String         @default("DAI")
   notifications    String[]
-  attributes       Json
+  attributes       Json           @default("{}")
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @default(now())
 }
