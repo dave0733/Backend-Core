@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { Role } from "@prisma/client";
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class AddUserDto {
   @IsNotEmpty()
@@ -36,4 +37,7 @@ export class AddUserDto {
   @IsNotEmpty()
   @IsString()
   metokenSymbol: string;
+
+  @IsOptional()
+  role: Role;
 }
