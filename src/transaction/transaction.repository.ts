@@ -13,4 +13,8 @@ export class TransactionRepository {
   updateTransaction(updateTransactionInput: Prisma.TransactionUpdateArgs) {
     return this.prisma.transaction.update(updateTransactionInput);
   }
+
+  getTransactions(findManyArgs: Prisma.TransactionFindManyArgs) {
+    return this.prisma.transaction.findMany(findManyArgs);
+  }
 }

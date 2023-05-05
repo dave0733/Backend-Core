@@ -11,12 +11,13 @@ export class RolesGuard implements CanActivate {
     const request = ctx.switchToHttp().getRequest();
     const user: IUserWithPublicProfile = request.user;
     // Get roles passed from guard argument.
-    const roles = this.reflector.get<string[]>("role", ctx.getHandler());
+    const roles = this.reflector.get<string[]>("roles", ctx.getHandler());
     if (!roles || roles.length === 0) return true; // No roles or empty roles array means method is open for all.
     const requiredRole = roles[0];
 
     // If required role is Admin, user.role should be admin.
     if (requiredRole === Role.ADMIN) return user.role === Role.ADMIN;
+    if (requiredRole === Role.USER) return user.role === Role.USER;
 
     // If required role is not Admin i.e. is User than it is open for all.
     return true;

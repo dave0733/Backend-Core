@@ -4,19 +4,20 @@ import { pinFileToIPFS } from "src/utilities/utils/web3";
 import { Readable } from "stream";
 import { AddUserDto } from "./dto/user.dto";
 import { UserRepository } from "./user.repository";
-import { generateOneTimeKey } from "src/utilities/utils/auth";
+import { Cron } from "@nestjs/schedule";
+import { PrsimaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class UserService {
-  constructor(private userRep: UserRepository) {}
+  constructor(private userRep: UserRepository, private prisma: PrsimaService) {}
 
   async getUserByAddress(address: string) {
     return this.userRep.searchUser({ address });
   }
 
-  async getUserByEmail(email: string) {
-    return this.userRep.searchUser({ email });
-  }
+  // async getUserByEmail(email: string) {
+  //   return this.userRep.searchUser({ email });
+  // }
 
   async getUser(where: Prisma.UserWhereUniqueInput) {
     return this.userRep.searchUser(where);

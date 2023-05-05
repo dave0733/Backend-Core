@@ -23,7 +23,7 @@ export class UserRepository {
   }
 
   searchUser(where: Prisma.UserWhereUniqueInput) {
-    return this.prisma.user.findUnique({ where });
+    return this.prisma.user.findUnique({ where, include: { publicProfile: true } });
   }
 
   addUser(userCreateInput: Prisma.UserCreateInput) {

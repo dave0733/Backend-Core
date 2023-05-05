@@ -32,4 +32,9 @@ export class UserController {
   initializeProfile(@Body() address: string, @Body() addUserDto: AddUserDto) {
     return this.userService.initalizeUserProfile(address, addUserDto);
   }
+
+  @Post("/test")
+  test() {
+    return "Ok";
+  }
 }

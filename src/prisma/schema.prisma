@@ -45,7 +45,7 @@ model PublicProfile {
   userId      String    @unique @db.ObjectId
   // DB Fields
   address     String    @unique
-  ens         String    @unique
+  ens         String
   username    String
   description String
   pfp         String
@@ -64,10 +64,10 @@ model User {
   // DB Fields
   role             Role
   address          String         @unique
-  email            String         @unique
+  email            String
   isPriorityUser   Boolean        @default(false)
   priorityRank     Int            @default(-1)
-  messageThreshold String         @default("0")
+  messageThreshold Int            @default(0)
   gateToken        String         @default("DAI")
   notifications    String[]
   oneTimeKey       String
@@ -87,4 +87,58 @@ model Transaction {
   chainId Int
   status  String
   type    TransactionType
+}
+
+model admins {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime
+  address   String
+  addedBy   String
+}
+
+model priorityusers {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime
+  address   String
+  addedBy   String
+  rank      Int
+}
+
+model transactions {
+  // DB Relations
+  // Keys (id and other uniques)
+  id      String          @id @default(auto()) @map("_id") @db.ObjectId
+  // DB Fields
+  to      String
+  from    String
+  hash    String
+  chainId Int
+  status  String
+  type    TransactionType
+}
+
+model users {
+  id                      String    @id @default(auto()) @map("_id") @db.ObjectId
+  address                 String?
+  description             String?
+  email                   String?
+  name                    String?
+  ens                     String?
+  metoken                 Metoken?
+  notificationPreferences Json?
+  message_token_threshold Json?
+  did                     String?
+  tags                    String[]
+  image                   Json?
+  background              Json?
+  url                     String?
+  gate_token              String?
+  isAdmin                 Boolean?
+  adminAddedBy            String?
+  createdAt               DateTime?
+  priorityuserAddedBy     String?
+  isPriorityUser          Boolean?
+  attributes              String?
+  rank                    Int?
+  updatedAt               Int?
 }
