@@ -3,6 +3,8 @@ import { providers, utils } from "ethers";
 import pinataSDK, { PinataPinOptions } from "@pinata/sdk";
 import { TxStatus } from "../constants/transaction";
 import { recoverAddress } from "ethers/lib/utils";
+import { constructRawMessage } from "./auth";
+import { ITypedData } from "../types.ts/auth";
 
 const configService = new ConfigService();
 
@@ -61,7 +63,20 @@ export const pinFileToIPFS = async (readableStreamForFile: any, name: string) =>
   };
 };
 
-export const verifySignedMessage = (address: string, rawMessage: string, signedMessage: string) => {
-  const rcoveredAddress = utils.verifyMessage(rawMessage, signedMessage);
+export const verifySignedMessage = (
+  address: string,
+  signedMessage: string,
+  typedData: ITypedData,
+) => {
+  const { domain, types, value } = typedData;
+  const rcoveredAddress = utils.verifyTypedData(domain, types, value, signedMessage);
   return rcoveredAddress.toLowerCase() === address.toLowerCase();
+};
+
+export const constructTypedData = (oneTimeKey: string) => {
+  const domain = { chainId: "5", name: "MeTokens App" };
+  const types = { "MeTokens Login Message": [{ name: "message", type: "string" }] };
+  const rawMessage = constructRawMessage(oneTimeKey);
+  const value = { message: rawMessage };
+  return { domain, types, value };
 };

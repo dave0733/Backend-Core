@@ -4,8 +4,8 @@ import { pinFileToIPFS } from "src/utilities/utils/web3";
 import { Readable } from "stream";
 import { AddUserDto } from "./dto/user.dto";
 import { UserRepository } from "./user.repository";
-import { Cron } from "@nestjs/schedule";
 import { PrsimaService } from "src/prisma/prisma.service";
+import { generateOneTimeKey } from "src/utilities/utils/auth";
 
 @Injectable()
 export class UserService {
@@ -21,6 +21,17 @@ export class UserService {
 
   async getUser(where: Prisma.UserWhereUniqueInput) {
     return this.userRep.searchUser(where);
+  }
+
+  async listUsers(first: number, skip: number) {
+    const where: Prisma.UserFindManyArgs = {
+      select: { address: true, isPriorityUser: true, priorityRank: true, publicProfile: true },
+      where: { isPriorityUser: true },
+      orderBy: { priorityRank: "asc" },
+      take: first,
+      skip,
+    };
+    return this.userRep.getUsers(where);
   }
 
   async addUser(addUserDto: AddUserDto) {
@@ -99,5 +110,12 @@ export class UserService {
     if (!user) return "";
     const { oneTimeKey } = user;
     return oneTimeKey;
+  }
+
+  async updateOneTimeKey(address: string) {
+    await this.userRep.updateUser({
+      where: { address },
+      data: { oneTimeKey: generateOneTimeKey() },
+    });
   }
 }

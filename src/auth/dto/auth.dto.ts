@@ -7,3 +7,11 @@ export class LoginDto {
   @IsNotEmpty()
   signedMessage: string;
 }
+
+export class LoginDto2 {
+  @IsNotEmpty()
+  message: string;
+
+  @IsNotEmpty()
+  signature: string;
+}

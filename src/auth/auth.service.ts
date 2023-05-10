@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { UserService } from "src/user/user.service";
-import { verifySignedMessage } from "src/utilities/utils/web3";
+import { constructTypedData, verifySignedMessage } from "src/utilities/utils/web3";
 import { LoginDto } from "./dto/auth.dto";
 import { JwtService } from "@nestjs/jwt";
 import { ITokens, IUserWithPublicProfile } from "src/utilities/types.ts/auth";
@@ -11,6 +11,7 @@ import {
   REFRESH_TOKEN_SECRET,
 } from "src/utilities/constants/auth";
 import { Role } from "@prisma/client";
+import { constructRawMessage } from "src/utilities/utils/auth";
 
 @Injectable()
 export class AuthService {
@@ -18,12 +19,13 @@ export class AuthService {
 
   async login(loginDto: LoginDto) {
     const { address, signedMessage } = loginDto;
-    // const rawMessage = await this.userService.getOneTimeKey(address);
-    const rawMessage = "temporary-message";
-    const isVerified = verifySignedMessage(address, rawMessage, signedMessage);
+    const oneTimeKey = await this.userService.getOneTimeKey(address);
+    const typedData = constructTypedData(oneTimeKey);
+    const isVerified = verifySignedMessage(address, signedMessage, typedData);
     if (!isVerified) throw new UnauthorizedException("Message signature could not be verified");
     const user = await this.userService.getUser({ address });
     if (!user) throw new UnauthorizedException("User not found");
+    this.userService.updateOneTimeKey(address);
     const tokens = await this.getTokens(user);
     return {
       user,

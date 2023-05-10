@@ -1,9 +1,12 @@
 import {
   Body,
   Controller,
+  Get,
   MaxFileSizeValidator,
+  Param,
   ParseFilePipe,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from "@nestjs/common";
@@ -31,6 +34,11 @@ export class UserController {
   @Post("/profile/initialize")
   initializeProfile(@Body() address: string, @Body() addUserDto: AddUserDto) {
     return this.userService.initalizeUserProfile(address, addUserDto);
+  }
+
+  @Get("/list")
+  listUsers(@Query("first") first: number, @Query("skip") skip: number) {
+    return this.userService.listUsers(first, skip);
   }
 
   @Post("/test")
