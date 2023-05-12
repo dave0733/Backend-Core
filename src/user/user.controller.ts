@@ -23,10 +23,10 @@ export class UserController {
   upload(
     @UploadedFile(
       new ParseFilePipe({
-        validators: [new MaxFileSizeValidator({ maxSize: 1000 })],
+        validators: [new MaxFileSizeValidator({ maxSize: 100000 })],
       }),
     )
-    files: Array<Express.Multer.File>,
+    files: Express.Multer.File,
   ) {
     return this.userService.uploadImage(files);
   }
@@ -42,7 +42,8 @@ export class UserController {
   }
 
   @Post("/test")
-  test() {
-    return "Ok";
+  test(@Body() testInput: { address: string; key: string; value: string }) {
+    const { address, key, value } = testInput;
+    return this.userService.addUserAttribute(key, value, address);
   }
 }
