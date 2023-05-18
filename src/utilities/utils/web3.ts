@@ -1,8 +1,7 @@
 import { ConfigService } from "@nestjs/config";
 import { providers, utils } from "ethers";
-import pinataSDK, { PinataPinOptions } from "@pinata/sdk";
+const pinataSDK = require("@pinata/sdk");
 import { TxStatus } from "../constants/transaction";
-import { recoverAddress } from "ethers/lib/utils";
 import { constructRawMessage } from "./auth";
 import { ITypedData } from "../types.ts/auth";
 
@@ -42,12 +41,11 @@ export const getPinataInstance = () => {
 export const pinFileToIPFS = async (readableStreamForFile: any, name: string) => {
   const pinata = getPinataInstance();
 
-  const options: PinataPinOptions = {
+  const options = {
     pinataMetadata: {
       name,
     },
     pinataOptions: {
-      wrapWithDirectory: true,
       cidVersion: 0,
     },
   };

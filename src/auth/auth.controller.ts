@@ -19,25 +19,4 @@ export class AuthController {
     const typedData = constructTypedData(oneTimeKey);
     return typedData;
   }
-
-  @Get("/nonce")
-  async getNonce() {
-    const nonce = generateNonce();
-    console.log({ nonce });
-    return nonce;
-  }
-
-  @Post("/verify-login")
-  async verifyLogin(@Body() loginDto: LoginDto2) {
-    const { message, signature } = loginDto;
-    const siweMessage = new SiweMessage(message);
-    console.log({ message, signature });
-    try {
-      const resp = await siweMessage.verify({ signature });
-      console.log({ resp });
-      return true;
-    } catch (error) {
-      return false;
-    }
-  }
 }
