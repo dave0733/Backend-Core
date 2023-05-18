@@ -134,4 +134,12 @@ export class UserService {
     });
     return updatedUser;
   }
+
+  async getUserAttribute(address: string, key: string) {
+    const user = await this.userRep.getUser({ where: { address: address.toLowerCase() } });
+    if (!user) throw new NotFoundException("User not found with this address");
+    const { attributes } = user;
+    const value = attributes[key];
+    return value;
+  }
 }
