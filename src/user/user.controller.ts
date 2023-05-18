@@ -23,6 +23,12 @@ import { IUserWithPublicProfile } from "src/utilities/types.ts/auth";
 export class UserController {
   constructor(private userService: UserService) {}
 
+  @Get("/profile")
+  @RequireAuth()
+  getProfile(@GetUser() user: IUserWithPublicProfile) {
+    return user;
+  }
+
   @Post("/upload")
   @RequireAuth()
   @UseInterceptors(FileInterceptor("file"))
