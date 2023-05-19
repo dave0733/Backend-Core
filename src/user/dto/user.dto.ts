@@ -10,21 +10,9 @@ export class AddUserDto {
   @IsString()
   email: string;
 
-  @IsString()
-  ens: string;
-
   @IsNotEmpty()
   @IsString()
   username: string;
-
-  @IsString()
-  description: string;
-
-  @IsString()
-  pfp: string;
-
-  @IsString()
-  cover: string;
 
   @IsNotEmpty()
   @IsString()
@@ -37,6 +25,63 @@ export class AddUserDto {
   @IsNotEmpty()
   @IsString()
   metokenSymbol: string;
+
+  @IsString()
+  @IsOptional()
+  ens: string;
+
+  @IsString()
+  @IsOptional()
+  description: string;
+
+  @IsString()
+  @IsOptional()
+  pfp: string;
+
+  @IsString()
+  @IsOptional()
+  cover: string;
+
+  @IsOptional()
+  role: Role;
+}
+
+export class UpdateUserDto {
+  @IsNotEmpty()
+  @IsString()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  username: string;
+
+  @IsNotEmpty()
+  @IsString()
+  metokenAddress: string;
+
+  @IsNotEmpty()
+  @IsString()
+  metokenName: string;
+
+  @IsNotEmpty()
+  @IsString()
+  metokenSymbol: string;
+
+  @IsString()
+  @IsOptional()
+  ens: string;
+
+  @IsString()
+  @IsOptional()
+  description: string;
+
+  @IsString()
+  @IsOptional()
+  pfp: string;
+
+  @IsString()
+  @IsOptional()
+  cover: string;
 
   @IsOptional()
   role: Role;

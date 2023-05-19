@@ -43,11 +43,11 @@ export class UserController {
     return this.userService.uploadImage(files);
   }
 
-  @Post("/profile/initialize")
+  @Patch("/profile")
   @RequireAuth()
   initializeProfile(@GetUser() user: IUserWithPublicProfile, @Body() addUserDto: AddUserDto) {
     const { address } = user;
-    return this.userService.initalizeUserProfile(address, addUserDto);
+    return this.userService.updateProfile(address, addUserDto);
   }
 
   @Get("/list")
@@ -76,5 +76,10 @@ export class UserController {
     const { address } = user;
     const { key, value } = body;
     return this.userService.addUserAttribute(key, value, address);
+  }
+
+  @Get("/migration-status/:address")
+  migrationStatus(@Param("address") address: string) {
+    return this.userService.getUserAttribute(address, "hasMigrated");
   }
 }
