@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import { Prisma } from "@prisma/client";
 import { pinFileToIPFS } from "src/utilities/utils/web3";
 import { Readable } from "stream";
-import { AddUserDto } from "./dto/user.dto";
+import { AddUserDto, UpdateUserDto } from "./dto/user.dto";
 import { UserRepository } from "./user.repository";
 import { PrsimaService } from "src/prisma/prisma.service";
 import { generateOneTimeKey } from "src/utilities/utils/auth";
@@ -58,26 +58,24 @@ export class UserService {
     });
   }
 
-  async initalizeUserProfile(address: string, addUserDto: AddUserDto) {
+  async updateProfile(address: string, updateUserDto: UpdateUserDto) {
     return this.userRep.updateUser({
       where: { address },
       data: {
-        address: addUserDto.address.toLowerCase(),
-        email: addUserDto.email,
+        email: updateUserDto.email,
         notifications: ["BUY", "SELL", "SPEND"],
-        role: addUserDto.role,
+        role: updateUserDto.role,
         publicProfile: {
-          create: {
-            address: addUserDto.address.toLowerCase(),
-            ens: addUserDto.ens,
-            username: addUserDto.username,
-            description: addUserDto.description,
-            pfp: addUserDto.pfp,
-            cover: addUserDto.cover,
+          update: {
+            ens: updateUserDto.ens,
+            username: updateUserDto.username,
+            description: updateUserDto.description,
+            pfp: updateUserDto.pfp,
+            cover: updateUserDto.cover,
             metoken: {
-              address: addUserDto.metokenAddress,
-              name: addUserDto.metokenName,
-              symbol: addUserDto.metokenSymbol,
+              address: updateUserDto.metokenAddress,
+              name: updateUserDto.metokenName,
+              symbol: updateUserDto.metokenSymbol,
             },
           },
         },
