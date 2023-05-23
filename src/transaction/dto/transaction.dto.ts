@@ -15,8 +15,8 @@ export class AddTransactionDto {
   hash: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  chainId: number;
+  @IsString()
+  chainId: string;
 
   @IsNotEmpty()
   @IsString()
@@ -29,6 +29,6 @@ export class CompleteTransactionDto {
   hash: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  chainId: number;
+  @IsString()
+  chainId: string;
 }
