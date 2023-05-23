@@ -25,7 +25,7 @@ export class UserService {
 
   async listUsers(first: number, skip: number) {
     const where: Prisma.UserFindManyArgs = {
-      select: { address: true, publicProfile: true },
+      select: { address: true, publicProfile: true, attributes: true },
       orderBy: { priorityRank: "desc" },
       take: first,
       skip,

@@ -14,7 +14,7 @@ export class TransactionService {
       to: createTransactionDto.to,
       from: createTransactionDto.from,
       hash: createTransactionDto.hash,
-      chainId: createTransactionDto.chainId,
+      chainId: Number(createTransactionDto.chainId),
       status: TxStatus.PENDING,
       type: createTransactionDto.type,
     });
@@ -22,7 +22,7 @@ export class TransactionService {
 
   async completePendingTransaction(completeTransactionDto: CompleteTransactionDto) {
     const status = await getTransactionStatus(
-      completeTransactionDto.chainId,
+      Number(completeTransactionDto.chainId),
       completeTransactionDto.hash,
     );
     if (status === TxStatus.PENDING) return null;
@@ -43,7 +43,7 @@ export class TransactionService {
     try {
       await Promise.all(
         pendingTransaction.map(tx => {
-          return this.completePendingTransaction({ hash: tx.hash, chainId: tx.chainId });
+          return this.completePendingTransaction({ hash: tx.hash, chainId: tx.chainId.toString() });
         }),
       );
     } catch (error) {
