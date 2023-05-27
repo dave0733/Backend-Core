@@ -15,7 +15,6 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import { UserService } from "./user.service";
 import { AddUserDto } from "./dto/user.dto";
 import { GetUser } from "src/auth/decorators/getUser.decorator";
-import { User } from "@prisma/client";
 import { RequireAuth } from "src/auth/decorators/auth.decorator";
 import { IUserWithPublicProfile } from "src/utilities/types.ts/auth";
 
@@ -50,6 +49,12 @@ export class UserController {
     return this.userService.updateProfile(address, addUserDto);
   }
 
+  // @Patch("/profile-public")
+  // initializeProfilePub(@Body() addUserDto: UpdateUserDto) {
+  //   const { address } = addUserDto;
+  //   return this.userService.updateProfile(address, addUserDto);
+  // }
+
   @Get("/list")
   listUsers(@Query("first") first: number, @Query("skip") skip: number) {
     return this.userService.listUsers(first, skip);
@@ -72,10 +77,16 @@ export class UserController {
   }
 
   @Patch("/attribute")
+  @RequireAuth()
   setAttribute(@GetUser() user: IUserWithPublicProfile, @Body() body: any) {
     const { address } = user;
     const { key, value } = body;
     return this.userService.addUserAttribute(key, value, address);
+  }
+
+  @Get("/public-profile/:address")
+  getPublicProfile(@Param("address") address: string) {
+    return this.userService.getUserPublicProfile({ address });
   }
 
   @Get("/migration-status/:address")

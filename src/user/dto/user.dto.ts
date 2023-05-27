@@ -47,9 +47,13 @@ export class AddUserDto {
 }
 
 export class UpdateUserDto {
+  // @IsNotEmpty()
+  // @IsString()
+  // email: string;
+
   @IsNotEmpty()
   @IsString()
-  email: string;
+  address: string;
 
   @IsNotEmpty()
   @IsString()
@@ -85,4 +89,17 @@ export class UpdateUserDto {
 
   @IsOptional()
   role: Role;
+}
+
+export class AddAttributePublicDto {
+  @IsNotEmpty()
+  @IsString()
+  address: string;
+
+  @IsNotEmpty()
+  @IsString()
+  key: string;
+
+  @IsNotEmpty()
+  value: any;
 }
