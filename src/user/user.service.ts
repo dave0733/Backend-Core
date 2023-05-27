@@ -62,7 +62,6 @@ export class UserService {
     return this.userRep.updateUser({
       where: { address },
       data: {
-        email: updateUserDto.email,
         notifications: ["BUY", "SELL", "SPEND"],
         role: updateUserDto.role,
         publicProfile: {
