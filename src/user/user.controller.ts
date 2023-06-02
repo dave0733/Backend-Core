@@ -28,6 +28,11 @@ export class UserController {
     return user;
   }
 
+  @Get("/search")
+  search(@Query("item") item: string) {
+    return this.userService.search(item);
+  }
+
   @Post("/upload")
   @RequireAuth()
   @UseInterceptors(FileInterceptor("file"))

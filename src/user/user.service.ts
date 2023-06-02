@@ -15,9 +15,18 @@ export class UserService {
     return this.userRep.searchUser({ address: address.toLowerCase() });
   }
 
-  // async getUserByEmail(email: string) {
-  //   return this.userRep.searchUser({ email });
-  // }
+  async search(item: string) {
+    return this.userRep.getUsers({
+      include: { publicProfile: true },
+      where: {
+        OR: [
+          { address: { contains: item, mode: "insensitive" } },
+          { publicProfile: { username: { contains: item, mode: "insensitive" } } },
+          { publicProfile: { ens: { contains: item, mode: "insensitive" } } },
+        ],
+      },
+    });
+  }
 
   async getUser(where: Prisma.UserWhereUniqueInput) {
     return this.userRep.searchUser(where);
