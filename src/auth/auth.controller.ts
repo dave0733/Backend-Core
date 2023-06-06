@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Param, Post } from "@nestjs/common";
-import { LoginDto, LoginDto2 } from "./dto/auth.dto";
+import { LoginDto } from "./dto/auth.dto";
 import { AuthService } from "./auth.service";
-import { SiweMessage, generateNonce } from "siwe";
 import { constructTypedData } from "src/utilities/utils/web3";
 
 @Controller("auth")
