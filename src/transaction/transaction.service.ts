@@ -4,6 +4,7 @@ import { getTransactionStatus } from "src/utilities/utils/web3";
 import { AddTransactionDto, CompleteTransactionDto } from "./dto/transaction.dto";
 import { TransactionRepository } from "./transaction.repository";
 import { Cron } from "@nestjs/schedule";
+import { revalidatePage } from "src/utilities/utils/auth";
 
 @Injectable()
 export class TransactionService {
@@ -21,13 +22,22 @@ export class TransactionService {
   }
 
   async completePendingTransaction(completeTransactionDto: CompleteTransactionDto) {
+    const { hash } = completeTransactionDto;
     const status = await getTransactionStatus(
       Number(completeTransactionDto.chainId),
       completeTransactionDto.hash,
     );
     if (status === TxStatus.PENDING) return null;
+    const transaction = await this.transactionRep.getTransaction({ where: { hash } });
+    if (transaction) {
+      try {
+        revalidatePage(`/profile/$${transaction.to.toLowerCase()}`);
+      } catch (error) {
+        console.log(error);
+      }
+    }
     return this.transactionRep.updateTransaction({
-      where: { hash: completeTransactionDto.hash },
+      where: { hash },
       data: { status: TxStatus.SUCCESS },
     });
   }

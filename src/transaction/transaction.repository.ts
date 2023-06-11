@@ -17,4 +17,8 @@ export class TransactionRepository {
   getTransactions(findManyArgs: Prisma.TransactionFindManyArgs) {
     return this.prisma.transaction.findMany(findManyArgs);
   }
+
+  getTransaction(findUniqueArgs: Prisma.TransactionFindUniqueArgs) {
+    return this.prisma.transaction.findUnique(findUniqueArgs);
+  }
 }
