@@ -32,7 +32,7 @@ export class UserRepository {
 
   async getPublicProfile(where: Prisma.UserWhereUniqueInput) {
     const user = await this.prisma.user.findFirst({ where, include: { publicProfile: true } });
-    return user.publicProfile;
+    return user?.publicProfile;
   }
 
   updateUser(updateUserInput: Prisma.UserUpdateArgs) {

@@ -2,7 +2,6 @@ import { Body, Controller, Post } from "@nestjs/common";
 import { TransactionService } from "./transaction.service";
 import { AddTransactionDto, CompleteTransactionDto } from "./dto/transaction.dto";
 import { RequireAuth } from "src/auth/decorators/auth.decorator";
-import { Transaction } from "@prisma/client";
 
 @Controller("/transactions")
 export class TransactionController {
