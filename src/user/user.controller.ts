@@ -17,6 +17,7 @@ import { AddUserDto } from "./dto/user.dto";
 import { GetUser } from "src/auth/decorators/getUser.decorator";
 import { RequireAuth } from "src/auth/decorators/auth.decorator";
 import { IUserWithPublicProfile } from "src/utilities/types.ts/auth";
+import { revalidatePage } from "src/utilities/utils/auth";
 
 @Controller("user")
 export class UserController {
@@ -68,7 +69,7 @@ export class UserController {
   @Post("/test")
   test(@Body() testInput: { address: string; key: string; value: string }) {
     const { address, key, value } = testInput;
-    return this.userService.addUserAttribute(key, value, address);
+    return revalidatePage("hello");
   }
 
   @Get("/attribute")
@@ -97,5 +98,10 @@ export class UserController {
   @Get("/migration-status/:address")
   migrationStatus(@Param("address") address: string) {
     return this.userService.getUserAttribute(address, "hasMigrated");
+  }
+
+  @Get("/message-threshold/:address")
+  messageThreshold(@Param("address") address: string) {
+    return this.userService.messageThreshold(address);
   }
 }

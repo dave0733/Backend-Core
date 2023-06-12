@@ -5,7 +5,7 @@ import { Readable } from "stream";
 import { AddUserDto, UpdateUserDto } from "./dto/user.dto";
 import { UserRepository } from "./user.repository";
 import { PrsimaService } from "src/prisma/prisma.service";
-import { generateOneTimeKey } from "src/utilities/utils/auth";
+import { generateOneTimeKey, revalidatePage } from "src/utilities/utils/auth";
 
 @Injectable()
 export class UserService {
@@ -68,6 +68,11 @@ export class UserService {
   }
 
   async updateProfile(address: string, updateUserDto: UpdateUserDto) {
+    try {
+      revalidatePage(`/profile/$${address.toLowerCase()}`);
+    } catch (error) {
+      console.log(error);
+    }
     return this.userRep.updateUser({
       where: { address },
       data: {
@@ -143,9 +148,15 @@ export class UserService {
 
   async getUserAttribute(address: string, key: string) {
     const user = await this.userRep.getUser({ where: { address: address.toLowerCase() } });
-    if (!user) throw new NotFoundException("User not found with this address");
+    if (!user) return true;
     const { attributes } = user;
     const value = attributes[key];
     return value;
+  }
+
+  async messageThreshold(address: string) {
+    const user = await this.userRep.getUser({ where: { address: address.toLowerCase() } });
+    if (!user) return { gateToken: "DAI", messageThreshold: 0 };
+    return { gateToken: user.gateToken, messageThreshold: user.messageThreshold };
   }
 }

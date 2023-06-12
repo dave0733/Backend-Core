@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma, User } from "@prisma/client";
 import { UserRepository } from "src/user/user.repository";
 import { IUserWithPublicProfile } from "src/utilities/types.ts/auth";
+import { revalidatePage } from "src/utilities/utils/auth";
 
 @Injectable()
 export class AdminService {
@@ -59,6 +60,11 @@ export class AdminService {
   async addPriorityUser(address: string) {
     const user = await this.userRep.getUser({ where: { address } });
     if (!user) throw new NotFoundException("User not found with this address");
+    try {
+      revalidatePage(`/discover`);
+    } catch (error) {
+      console.log(error);
+    }
     const priorityUsers = await this.getPriorityUsers();
     const availableRank = priorityUsers.length;
     return this.userRep.updateUser({
@@ -70,6 +76,11 @@ export class AdminService {
   async removePriorityUser(address: string) {
     const user = await this.userRep.getUser({ where: { address } });
     if (!user) throw new NotFoundException("User not found with this address");
+    try {
+      revalidatePage(`/discover`);
+    } catch (error) {
+      console.log(error);
+    }
     await this.userRep.updateUser({
       where: { address },
       data: { isPriorityUser: false, priorityRank: -1, updatedAt: new Date() },
@@ -78,6 +89,11 @@ export class AdminService {
   }
 
   async reorderPriorityUsers(newList: IUserWithPublicProfile[]) {
+    try {
+      revalidatePage(`/discover`);
+    } catch (error) {
+      console.log(error);
+    }
     const initial: [(string | number)[], Prisma.UserUpdateInput[]] = [[], []];
     const [uniqueIds, updateUserData] = newList.reduce(
       (acc: [(string | number)[], Prisma.UserUpdateInput[]], curr: User) => {
