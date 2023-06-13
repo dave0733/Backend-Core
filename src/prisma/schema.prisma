@@ -17,12 +17,11 @@ type Metoken {
 }
 
 type Service {
-  publicProfileId String
-  orbisId         String
-  name            String
-  description     String
-  cost            Float
-  token           String
+  orbisId     String
+  name        String
+  description String
+  cost        Float
+  token       String
 }
 
 enum TransactionType {

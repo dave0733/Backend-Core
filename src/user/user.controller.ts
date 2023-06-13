@@ -13,7 +13,7 @@ import {
 } from "@nestjs/common";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { UserService } from "./user.service";
-import { AddUserDto } from "./dto/user.dto";
+import { InitializeUserDto, UpdatePublicProfileDto, UpdateSettingsDto } from "./dto/user.dto";
 import { GetUser } from "src/auth/decorators/getUser.decorator";
 import { RequireAuth } from "src/auth/decorators/auth.decorator";
 import { IUserWithPublicProfile } from "src/utilities/types.ts/auth";
@@ -48,18 +48,25 @@ export class UserController {
     return this.userService.uploadImage(files);
   }
 
-  @Patch("/profile")
+  @Patch("/initialize-profile")
   @RequireAuth()
-  initializeProfile(@GetUser() user: IUserWithPublicProfile, @Body() addUserDto: AddUserDto) {
+  initializeProfile(
+    @GetUser() user: IUserWithPublicProfile,
+    @Body() initializeUserDto: InitializeUserDto,
+  ) {
     const { address } = user;
-    return this.userService.updateProfile(address, addUserDto);
+    return this.userService.initializeProfile(address, initializeUserDto);
   }
 
-  // @Patch("/profile-public")
-  // initializeProfilePub(@Body() addUserDto: UpdateUserDto) {
-  //   const { address } = addUserDto;
-  //   return this.userService.updateProfile(address, addUserDto);
-  // }
+  @Patch("/update-profile")
+  @RequireAuth()
+  updateProfile(
+    @GetUser() user: IUserWithPublicProfile,
+    @Body() updateUserDto: UpdatePublicProfileDto,
+  ) {
+    const { address } = user;
+    return this.userService.updateProfile(address, updateUserDto);
+  }
 
   @Get("/list")
   listUsers(@Query("first") first: number, @Query("skip") skip: number) {
@@ -100,8 +107,21 @@ export class UserController {
     return this.userService.getUserAttribute(address, "hasMigrated");
   }
 
-  @Get("/message-threshold/:address")
-  messageThreshold(@Param("address") address: string) {
-    return this.userService.messageThreshold(address);
+  @Patch("/settings")
+  @RequireAuth()
+  settings(@GetUser() user: IUserWithPublicProfile, @Body() updateSettingsDto: UpdateSettingsDto) {
+    const { address } = user;
+    return this.userService.updateSettings(address, updateSettingsDto);
+  }
+
+  @Get("/message-settings/:address")
+  getMessageSettings(@Param("address") address: string) {
+    return this.userService.getMessageSettings(address);
+  }
+
+  @Get("/settings/:address")
+  @RequireAuth()
+  getSettings(@Param("address") address: string) {
+    return this.userService.getSettings(address);
   }
 }
