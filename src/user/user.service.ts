@@ -1,8 +1,13 @@
 import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Prisma, Role } from "@prisma/client";
 import { pinFileToIPFS } from "src/utilities/utils/web3";
 import { Readable } from "stream";
-import { AddUserDto, UpdateUserDto } from "./dto/user.dto";
+import {
+  AddUserDto,
+  InitializeUserDto,
+  UpdatePublicProfileDto,
+  UpdateSettingsDto,
+} from "./dto/user.dto";
 import { UserRepository } from "./user.repository";
 import { PrsimaService } from "src/prisma/prisma.service";
 import { generateOneTimeKey, revalidatePage } from "src/utilities/utils/auth";
@@ -67,7 +72,41 @@ export class UserService {
     });
   }
 
-  async updateProfile(address: string, updateUserDto: UpdateUserDto) {
+  async updateProfile(address: string, updateUserDto: UpdatePublicProfileDto) {
+    try {
+      revalidatePage(`/profile/$${address.toLowerCase()}`);
+    } catch (error) {
+      console.log(error);
+    }
+    const newServices: Prisma.ServiceCreateInput[] = updateUserDto.services.map(item => {
+      return {
+        orbisId: item.id,
+        name: item.name,
+        description: item.description,
+        cost: item.cost,
+        token: item.token,
+      };
+    });
+    const updatedUser = await this.userRep.updateUser({
+      where: { address },
+      data: {
+        publicProfile: {
+          update: {
+            ens: updateUserDto.ens,
+            username: updateUserDto.username,
+            description: updateUserDto.description,
+            pfp: updateUserDto.pfp,
+            cover: updateUserDto.cover,
+            services: newServices,
+            updatedAt: new Date(),
+          },
+        },
+      },
+    });
+    return updatedUser;
+  }
+
+  async initializeProfile(address: string, initializeProfileDto: InitializeUserDto) {
     try {
       revalidatePage(`/profile/$${address.toLowerCase()}`);
     } catch (error) {
@@ -76,20 +115,25 @@ export class UserService {
     return this.userRep.updateUser({
       where: { address },
       data: {
-        notifications: ["BUY", "SELL", "SPEND"],
-        role: updateUserDto.role,
+        notifications: initializeProfileDto.notifications,
+        role: Role.USER,
         publicProfile: {
           update: {
-            ens: updateUserDto.ens,
-            username: updateUserDto.username,
-            description: updateUserDto.description,
-            pfp: updateUserDto.pfp,
-            cover: updateUserDto.cover,
+            address,
+            ens: initializeProfileDto.ens,
+            username: initializeProfileDto.username,
+            description: initializeProfileDto.description,
+            pfp: initializeProfileDto.pfp,
+            cover: initializeProfileDto.cover,
+            // services: initializeProfileDto.services,
             metoken: {
-              address: updateUserDto.metokenAddress,
-              name: updateUserDto.metokenName,
-              symbol: updateUserDto.metokenSymbol,
+              update: {
+                address: initializeProfileDto.metokenAddress,
+                name: initializeProfileDto.metokenName,
+                symbol: initializeProfileDto.metokenSymbol,
+              },
             },
+            updatedAt: new Date(),
           },
         },
       },
@@ -154,9 +198,38 @@ export class UserService {
     return value;
   }
 
-  async messageThreshold(address: string) {
+  async getMessageSettings(address: string) {
     const user = await this.userRep.getUser({ where: { address: address.toLowerCase() } });
     if (!user) return { gateToken: "DAI", messageThreshold: 0 };
     return { gateToken: user.gateToken, messageThreshold: user.messageThreshold };
+  }
+
+  async getSettings(address: string) {
+    const user = await this.userRep.getUser({ where: { address: address.toLowerCase() } });
+    if (!user) return { gateToken: "DAI", messageThreshold: 0 };
+    return {
+      email: user.email,
+      notifications: user.notifications,
+      gateToken: user.gateToken,
+      messageThreshold: user.messageThreshold,
+    };
+  }
+
+  async updateSettings(address: string, updateSettingsDto: UpdateSettingsDto) {
+    const user = await this.userRep.updateUser({
+      where: { address: address.toLowerCase() },
+      data: {
+        email: updateSettingsDto.email,
+        notifications: updateSettingsDto.notifications,
+        gateToken: updateSettingsDto.gateToken,
+        messageThreshold: updateSettingsDto.messageThreshold,
+      },
+    });
+    return {
+      gateToken: user.gateToken,
+      messageThreshold: user.messageThreshold,
+      email: user.email,
+      notifications: user.notifications,
+    };
   }
 }
