@@ -1,5 +1,5 @@
 import { TransactionType } from "@prisma/client";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsNumberString, IsString } from "class-validator";
 
 export class AddTransactionDto {
   @IsNotEmpty()
@@ -15,7 +15,7 @@ export class AddTransactionDto {
   hash: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumberString()
   chainId: string;
 
   @IsNotEmpty()
@@ -29,6 +29,6 @@ export class CompleteTransactionDto {
   hash: string;
 
   @IsNotEmpty()
-  @IsString()
+  @IsNumberString()
   chainId: string;
 }
