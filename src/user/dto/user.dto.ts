@@ -1,5 +1,13 @@
 import { Role } from "@prisma/client";
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { Type } from "class-transformer";
+import {
+  IsArray,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from "class-validator";
 
 export class AddUserDto {
   @IsNotEmpty()
@@ -46,14 +54,53 @@ export class AddUserDto {
   role: Role;
 }
 
-export class UpdateUserDto {
-  // @IsNotEmpty()
-  // @IsString()
-  // email: string;
+export class UpdatePublicProfileDto {
+  @IsOptional()
+  username: string;
+
+  @IsOptional()
+  ens: string;
+
+  @IsOptional()
+  description: string;
+
+  @IsOptional()
+  pfp: string;
+
+  @IsOptional()
+  cover: string;
+
+  @ValidateNested({ each: true })
+  @Type(() => ServiceInput)
+  services: ServiceInput[];
+}
+
+class ServiceInput {
+  @IsNotEmpty()
+  @IsString()
+  id: string;
 
   @IsNotEmpty()
   @IsString()
-  address: string;
+  name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  description: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  cost: number;
+
+  @IsNotEmpty()
+  @IsString()
+  token: string;
+}
+
+export class InitializeUserDto {
+  @IsNotEmpty()
+  @IsString()
+  email: string;
 
   @IsNotEmpty()
   @IsString()
@@ -71,24 +118,20 @@ export class UpdateUserDto {
   @IsString()
   metokenSymbol: string;
 
-  @IsString()
   @IsOptional()
   ens: string;
 
-  @IsString()
   @IsOptional()
   description: string;
 
-  @IsString()
   @IsOptional()
   pfp: string;
 
-  @IsString()
   @IsOptional()
   cover: string;
 
   @IsOptional()
-  role: Role;
+  notifications: string[];
 }
 
 export class AddAttributePublicDto {
@@ -102,4 +145,21 @@ export class AddAttributePublicDto {
 
   @IsNotEmpty()
   value: any;
+}
+
+export class UpdateSettingsDto {
+  @IsOptional()
+  @IsString()
+  gateToken: string;
+
+  @IsOptional()
+  @IsNumber()
+  messageThreshold: number;
+
+  @IsOptional()
+  @IsString()
+  email: string;
+
+  @IsOptional()
+  notifications: string[];
 }
