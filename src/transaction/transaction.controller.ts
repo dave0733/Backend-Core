@@ -18,4 +18,9 @@ export class TransactionController {
   completeBuyTransaction(@Body() completeTransactionDto: CompleteTransactionDto) {
     return this.transactionService.completePendingTransaction(completeTransactionDto);
   }
+
+  @Post("/test")
+  testMethod() {
+    return this.transactionService.test();
+  }
 }
