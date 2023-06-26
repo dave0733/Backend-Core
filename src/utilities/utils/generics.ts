@@ -7,3 +7,9 @@ export function generateRandomString(length = 6) {
   }
   return result;
 }
+
+export const getShortenedAddress = (address: string, len = 6): string => {
+  const shortenedAddress =
+    address.substring(0, len + 2) + "..." + address.substring(address.length - len - 1);
+  return shortenedAddress;
+};

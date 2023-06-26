@@ -16,6 +16,13 @@ import { generateOneTimeKey, revalidatePage } from "src/utilities/utils/auth";
 export class UserService {
   constructor(private userRep: UserRepository, private prisma: PrsimaService) {}
 
+  async testMethod() {
+    // 0x791deaa46a54ab16939b889c74e4cccbb4ab095d
+    // 0x8321926c8aae281ef9d8520a772eb1d94a9ec6dd with pp
+    // 0x58f34948748c828fc9ae530fb225e10547997758 without pp
+    // txHash 0x79379ee8980e29e6bd069a21830f7c35511750f2247c0a2f5767f5d0e9ddc9c3
+  }
+
   async getUserByAddress(address: string) {
     return this.userRep.searchUser({ address: address.toLowerCase() });
   }
