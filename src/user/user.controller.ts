@@ -40,7 +40,7 @@ export class UserController {
   upload(
     @UploadedFile(
       new ParseFilePipe({
-        validators: [new MaxFileSizeValidator({ maxSize: 100000 })],
+        validators: [new MaxFileSizeValidator({ maxSize: 10000000 })],
       }),
     )
     files: Express.Multer.File,
