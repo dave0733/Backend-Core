@@ -3,7 +3,7 @@ import { UserService } from "src/user/user.service";
 import { constructTypedData, verifySignedMessage } from "src/utilities/utils/web3";
 import { LoginDto } from "./dto/auth.dto";
 import { JwtService } from "@nestjs/jwt";
-import { ITokens, IUserWithPublicProfile } from "src/utilities/types.ts/auth";
+import { ITokens, IUserWithPublicProfile } from "src/utilities/types/auth";
 import {
   ACCESS_TOKEN_EXP,
   ACCESS_TOKEN_SECRET,
@@ -11,7 +11,6 @@ import {
   REFRESH_TOKEN_SECRET,
 } from "src/utilities/constants/auth";
 import { Role } from "@prisma/client";
-import { constructRawMessage } from "src/utilities/utils/auth";
 
 @Injectable()
 export class AuthService {

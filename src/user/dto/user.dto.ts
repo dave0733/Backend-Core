@@ -1,58 +1,6 @@
 import { Role } from "@prisma/client";
 import { Type } from "class-transformer";
-import {
-  IsArray,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from "class-validator";
-
-export class AddUserDto {
-  @IsNotEmpty()
-  @IsString()
-  address: string;
-
-  @IsNotEmpty()
-  @IsString()
-  email: string;
-
-  @IsNotEmpty()
-  @IsString()
-  username: string;
-
-  @IsNotEmpty()
-  @IsString()
-  metokenAddress: string;
-
-  @IsNotEmpty()
-  @IsString()
-  metokenName: string;
-
-  @IsNotEmpty()
-  @IsString()
-  metokenSymbol: string;
-
-  @IsString()
-  @IsOptional()
-  ens: string;
-
-  @IsString()
-  @IsOptional()
-  description: string;
-
-  @IsString()
-  @IsOptional()
-  pfp: string;
-
-  @IsString()
-  @IsOptional()
-  cover: string;
-
-  @IsOptional()
-  role: Role;
-}
+import { IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
 
 export class UpdatePublicProfileDto {
   @IsOptional()
@@ -70,9 +18,26 @@ export class UpdatePublicProfileDto {
   @IsOptional()
   cover: string;
 
+  @IsOptional()
+  role: Role;
+
   @ValidateNested({ each: true })
   @Type(() => ServiceInput)
   services: ServiceInput[];
+}
+
+class MetokenInput {
+  @IsNotEmpty()
+  @IsString()
+  address: string;
+
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @IsNotEmpty()
+  @IsString()
+  symbol: string;
 }
 
 class ServiceInput {
@@ -108,30 +73,20 @@ export class InitializeUserDto {
 
   @IsNotEmpty()
   @IsString()
-  metokenAddress: string;
+  description: string;
 
-  @IsNotEmpty()
-  @IsString()
-  metokenName: string;
-
-  @IsNotEmpty()
-  @IsString()
-  metokenSymbol: string;
+  @ValidateNested()
+  @Type(() => MetokenInput)
+  metoken: MetokenInput;
 
   @IsOptional()
   ens: string;
-
-  @IsOptional()
-  description: string;
 
   @IsOptional()
   pfp: string;
 
   @IsOptional()
   cover: string;
-
-  @IsOptional()
-  notifications: string[];
 }
 
 export class AddAttributePublicDto {
