@@ -16,7 +16,7 @@ import { UserService } from "./user.service";
 import { InitializeUserDto, UpdatePublicProfileDto, UpdateSettingsDto } from "./dto/user.dto";
 import { GetUser } from "src/auth/decorators/getUser.decorator";
 import { RequireAuth } from "src/auth/decorators/auth.decorator";
-import { IUserWithPublicProfile } from "src/utilities/types.ts/auth";
+import { IUserWithPublicProfile } from "src/utilities/types/auth";
 import { revalidatePage } from "src/utilities/utils/auth";
 
 @Controller("user")

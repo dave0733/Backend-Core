@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { Transaction, TransactionType } from "@prisma/client";
-import { IUserWithPublicProfile } from "src/utilities/types.ts/auth";
+import { IUserWithPublicProfile } from "src/utilities/types/auth";
 import { getShortenedAddress } from "src/utilities/utils/generics";
 import * as SendGrid from "@sendgrid/mail";
 

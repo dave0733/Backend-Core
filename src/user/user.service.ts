@@ -2,15 +2,11 @@ import { BadRequestException, Injectable, NotFoundException } from "@nestjs/comm
 import { Prisma, Role } from "@prisma/client";
 import { pinFileToIPFS } from "src/utilities/utils/web3";
 import { Readable } from "stream";
-import {
-  AddUserDto,
-  InitializeUserDto,
-  UpdatePublicProfileDto,
-  UpdateSettingsDto,
-} from "./dto/user.dto";
+import { InitializeUserDto, UpdatePublicProfileDto, UpdateSettingsDto } from "./dto/user.dto";
 import { UserRepository } from "./user.repository";
 import { PrsimaService } from "src/prisma/prisma.service";
 import { generateOneTimeKey, revalidatePage } from "src/utilities/utils/auth";
+import { IAddUser } from "src/utilities/types/user";
 
 @Injectable()
 export class UserService {
@@ -54,7 +50,7 @@ export class UserService {
     return this.userRep.getUsers(where);
   }
 
-  async addUser(addUserDto: AddUserDto) {
+  async addUser(addUserDto: IAddUser) {
     return this.userRep.addUser({
       address: addUserDto.address.toLowerCase(),
       email: addUserDto.email,
@@ -122,7 +118,7 @@ export class UserService {
     return this.userRep.updateUser({
       where: { address },
       data: {
-        notifications: initializeProfileDto.notifications,
+        notifications: ["BUY", "SELL"],
         role: Role.USER,
         publicProfile: {
           update: {
@@ -132,12 +128,12 @@ export class UserService {
             description: initializeProfileDto.description,
             pfp: initializeProfileDto.pfp,
             cover: initializeProfileDto.cover,
-            // services: initializeProfileDto.services,
+            services: [],
             metoken: {
               update: {
-                address: initializeProfileDto.metokenAddress,
-                name: initializeProfileDto.metokenName,
-                symbol: initializeProfileDto.metokenSymbol,
+                address: initializeProfileDto.metoken.address,
+                name: initializeProfileDto.metoken.name,
+                symbol: initializeProfileDto.metoken.symbol,
               },
             },
             updatedAt: new Date(),

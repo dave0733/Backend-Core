@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { Prisma, User } from "@prisma/client";
 import { UserRepository } from "src/user/user.repository";
-import { IUserWithPublicProfile } from "src/utilities/types.ts/auth";
+import { IUserWithPublicProfile } from "src/utilities/types/auth";
 import { revalidatePage } from "src/utilities/utils/auth";
 
 @Injectable()

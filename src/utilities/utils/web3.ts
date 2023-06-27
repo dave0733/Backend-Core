@@ -3,7 +3,7 @@ import { providers, utils } from "ethers";
 const pinataSDK = require("@pinata/sdk");
 import { TxStatus } from "../constants/transaction";
 import { constructRawMessage } from "./auth";
-import { ITypedData } from "../types.ts/auth";
+import { ITypedData } from "../types/auth";
 
 const configService = new ConfigService();
 
