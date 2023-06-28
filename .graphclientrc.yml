@@ -1,0 +1,8 @@
+sources:
+  - name: metokens
+    handler:
+      graphql:
+        sources:
+          - endpoint: ${SUBGRAPH_URL}
+documents:
+  - ./graphql/GetOwnerMetoken.gql

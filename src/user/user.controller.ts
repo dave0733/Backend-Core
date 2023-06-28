@@ -17,7 +17,6 @@ import { InitializeUserDto, UpdatePublicProfileDto, UpdateSettingsDto } from "./
 import { GetUser } from "src/auth/decorators/getUser.decorator";
 import { RequireAuth } from "src/auth/decorators/auth.decorator";
 import { IUserWithPublicProfile } from "src/utilities/types/auth";
-import { revalidatePage } from "src/utilities/utils/auth";
 
 @Controller("user")
 export class UserController {
@@ -74,9 +73,8 @@ export class UserController {
   }
 
   @Post("/test")
-  test(@Body() testInput: { address: string; key: string; value: string }) {
-    const { address, key, value } = testInput;
-    return revalidatePage("hello");
+  async test() {
+    return "Test endpoint";
   }
 
   @Get("/attribute")
