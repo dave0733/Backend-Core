@@ -7,6 +7,8 @@ import { TransactionModule } from "./transaction/transaction.module";
 import { ScheduleModule } from "@nestjs/schedule";
 import { AdminModule } from "./admin/admin.module";
 import { EmailModule } from "./email/email.module";
+// import { GraphQLModule } from "@nestjs/graphql";
+// import { ApolloDriver, ApolloDriverConfig } from "@nestjs/apollo";
 
 @Module({
   imports: [
@@ -14,6 +16,9 @@ import { EmailModule } from "./email/email.module";
       isGlobal: true,
     }),
     ScheduleModule.forRoot(),
+    // GraphQLModule.forRoot<ApolloDriverConfig>({
+    //   driver: ApolloDriver,
+    // }),
     PrismaModule,
     AuthModule,
     UserModule,

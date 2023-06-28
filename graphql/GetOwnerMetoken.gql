@@ -1,0 +1,10 @@
+query GetOwnerMetoken($ownerAddress: String) {
+  meTokens(where: { owner: $ownerAddress }) {
+    id
+    name
+    symbol
+    owner {
+      id
+    }
+  }
+}
