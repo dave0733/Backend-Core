@@ -4528,7 +4528,7 @@ const metokensTransforms = [];
 const additionalTypeDefs = [] as any[];
 const metokensHandler = new GraphqlHandler({
               name: "metokens",
-              config: {"sources":[{"endpoint":"https://api.studio.thegraph.com/query/35797/metokens-core/v0.2.0"}]},
+              config: {"sources":[{"endpoint":"https://api.studio.thegraph.com/query/35797/metokens-core-goerli/v0.2.0"}]},
               baseDir,
               cache,
               pubsub,
