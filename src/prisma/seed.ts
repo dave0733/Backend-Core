@@ -3,32 +3,53 @@ const prisma = new PrismaClient();
 
 async function addUsers() {
   const users: any = await prisma.users.findRaw();
-  return await prisma.$transaction(
-    users.map((user: any) => {
-      return prisma.user.create({
-        data: {
-          address: user.address || "",
-          email: user.email || "",
-          notifications: getNotifications(user),
-          oneTimeKey: generateOneTimeKey(),
-          role: getRole(user),
-          isPriorityUser: !!user.isPriorityuser,
-          priorityRank: !!user.isPriorityuser && !!user.rank ? user.rank : -1,
-          publicProfile: {
-            create: {
-              address: user.address || "",
-              ens: user.ens || "",
-              username: user.username || "",
-              description: user.description || "",
-              pfp: getProfileImage(user),
-              cover: getCoverImage(user),
-              metoken: getMetokenObject(user),
-            },
-          },
-        },
-      });
-    }),
-  );
+  const newUsers = users.map((user: any) => ({
+    address: user.address || "",
+    email: user.email || "",
+    notifications: getNotifications(user),
+    oneTimeKey: generateOneTimeKey(),
+    role: getRole(user),
+    isPriorityUser: !!user.isPriorityuser,
+    priorityRank: !!user.isPriorityuser && !!user.rank ? user.rank : -1,
+    publicProfile: {
+      create: {
+        address: user.address || "",
+        ens: user.ens || "",
+        username: user.username || "",
+        description: user.description || "",
+        pfp: getProfileImage(user),
+        cover: getCoverImage(user),
+        metoken: getMetokenObject(user),
+      },
+    },
+  }));
+  console.log(newUsers);
+  // return await prisma.$transaction(
+  //   users.map((user: any) => {
+  //     return prisma.user.create({
+  //       data: {
+  //         address: user.address || "",
+  //         email: user.email || "",
+  //         notifications: getNotifications(user),
+  //         oneTimeKey: generateOneTimeKey(),
+  //         role: getRole(user),
+  //         isPriorityUser: !!user.isPriorityuser,
+  //         priorityRank: !!user.isPriorityuser && !!user.rank ? user.rank : -1,
+  //         publicProfile: {
+  //           create: {
+  //             address: user.address || "",
+  //             ens: user.ens || "",
+  //             username: user.username || "",
+  //             description: user.description || "",
+  //             pfp: getProfileImage(user),
+  //             cover: getCoverImage(user),
+  //             metoken: getMetokenObject(user),
+  //           },
+  //         },
+  //       },
+  //     });
+  //   }),
+  // );
 }
 
 async function addOldUsers() {
@@ -86,6 +107,7 @@ async function migrateTransactions() {
 
 try {
   migrateTransactions().then(res => console.log(res));
+  // addUsers().then(res => console.log(res));
 } catch (error) {
   console.log(error);
 }
