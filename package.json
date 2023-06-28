@@ -22,7 +22,6 @@
     "dev": "graphclient serve-dev"
   },
   "dependencies": {
-    "@graphprotocol/client-cli": "^3.0.0",
     "@nestjs/axios": "^2.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.1",
@@ -39,7 +38,6 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "ethers": "5.7.2",
-    "graphql": "^16.7.1",
     "multer": "^1.4.5-lts.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
