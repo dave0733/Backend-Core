@@ -72,7 +72,7 @@ export const verifySignedMessage = (
 };
 
 export const constructTypedData = (oneTimeKey: string) => {
-  const domain = { chainId: "5", name: "MeTokens App" };
+  const domain = { chainId: process.env.CHAIN_ID, name: "MeTokens App" };
   const types = { "MeTokens Login Message": [{ name: "message", type: "string" }] };
   const rawMessage = constructRawMessage(oneTimeKey);
   const value = { message: rawMessage };
