@@ -11,5 +11,7 @@ export interface IAddUser {
   description: string;
   pfp: string;
   cover: string;
+  github: string;
+  twitter: string;
   role: Role;
 }

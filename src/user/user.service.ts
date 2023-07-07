@@ -65,6 +65,8 @@ export class UserService {
           description: addUserDto.description,
           pfp: addUserDto.pfp,
           cover: addUserDto.cover,
+          github: addUserDto.github,
+          twitter: addUserDto.twitter,
           metoken: {
             address: addUserDto.metokenAddress,
             name: addUserDto.metokenName,
@@ -100,6 +102,8 @@ export class UserService {
             description: updateUserDto.description,
             pfp: updateUserDto.pfp,
             cover: updateUserDto.cover,
+            github: updateUserDto.github,
+            twitter: updateUserDto.twitter,
             services: newServices,
             updatedAt: new Date(),
           },
@@ -128,6 +132,8 @@ export class UserService {
             description: initializeProfileDto.description,
             pfp: initializeProfileDto.pfp,
             cover: initializeProfileDto.cover,
+            github: initializeProfileDto.github,
+            twitter: initializeProfileDto.twitter,
             services: [],
             metoken: {
               update: {

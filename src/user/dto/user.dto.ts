@@ -19,6 +19,12 @@ export class UpdatePublicProfileDto {
   cover: string;
 
   @IsOptional()
+  github: string;
+
+  @IsOptional()
+  twitter: string;
+
+  @IsOptional()
   role: Role;
 
   @ValidateNested({ each: true })
@@ -84,6 +90,12 @@ export class InitializeUserDto {
 
   @IsOptional()
   pfp: string;
+
+  @IsOptional()
+  github: string;
+
+  @IsOptional()
+  twitter: string;
 
   @IsOptional()
   cover: string;
