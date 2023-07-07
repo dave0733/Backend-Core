@@ -49,6 +49,8 @@ model PublicProfile {
   description String
   pfp         String
   cover       String
+  github      String?
+  twitter     String?
   services    Service[]
   metoken     Metoken
   createdAt   DateTime  @default(now())

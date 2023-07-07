@@ -43,6 +43,8 @@ export class AuthService {
       description: "",
       pfp: "",
       cover: "",
+      twitter: "",
+      github: "",
       metokenAddress: "",
       metokenName: "",
       metokenSymbol: "",
