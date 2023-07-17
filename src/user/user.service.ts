@@ -79,7 +79,7 @@ export class UserService {
 
   async updateProfile(address: string, updateUserDto: UpdatePublicProfileDto) {
     try {
-      revalidatePage(`/profile/$${address.toLowerCase()}`);
+      revalidatePage(`/profile/${address.toLowerCase()}`);
     } catch (error) {
       console.log(error);
     }
