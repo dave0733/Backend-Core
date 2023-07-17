@@ -115,7 +115,7 @@ export class UserService {
 
   async initializeProfile(address: string, initializeProfileDto: InitializeUserDto) {
     try {
-      revalidatePage(`/profile/$${address.toLowerCase()}`);
+      revalidatePage(`/profile/${address.toLowerCase()}`);
     } catch (error) {
       console.log(error);
     }
