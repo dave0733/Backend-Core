@@ -56,7 +56,7 @@ export class TransactionService {
     const transaction = await this.transactionRep.getTransaction({ where: { hash } });
     if (transaction) {
       try {
-        revalidatePage(`/profile/$${transaction.to.toLowerCase()}`);
+        revalidatePage(`/profile/${transaction.to.toLowerCase()}`);
       } catch (error) {
         console.log(error);
       }
