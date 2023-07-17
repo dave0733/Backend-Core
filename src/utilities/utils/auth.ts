@@ -18,17 +18,19 @@ export const constructRawMessage = (oneTimeKey: string) => {
 export const revalidatePage = async (path: string) => {
   const frontendUrl = configService.get("FRONTEND_URL");
   const httpService = new HttpService();
+  const updatePath = `${frontendUrl}/api/revalidate/?secret=this-is-revalidation-token&path=${path}`;
+  console.log("==================== LOGS ====================");
+  console.log("Update path: ", updatePath);
+  console.log("==================== LOGS ====================");
   const response = await firstValueFrom(
-    httpService
-      .get(`${frontendUrl}/api/revalidate/?secret=this-is-revalidation-token&path=${path}`)
-      .pipe(
-        catchError((error: AxiosError) => {
-          if (error.response.status === 401) {
-            throw new UnauthorizedException("Invalid token");
-          }
-          throw "An error happened!";
-        }),
-      ),
+    httpService.get(updatePath).pipe(
+      catchError((error: AxiosError) => {
+        if (error.response.status === 401) {
+          throw new UnauthorizedException("Invalid token");
+        }
+        throw "An error happened!";
+      }),
+    ),
   );
   return response.data;
   // const response = await fetch(
