@@ -19,9 +19,6 @@ export const revalidatePage = async (path: string) => {
   const frontendUrl = configService.get("FRONTEND_URL");
   const httpService = new HttpService();
   const updatePath = `${frontendUrl}/api/revalidate/?secret=this-is-revalidation-token&path=${path}`;
-  console.log("==================== LOGS ====================");
-  console.log("Update path: ", updatePath);
-  console.log("==================== LOGS ====================");
   const response = await firstValueFrom(
     httpService.get(updatePath).pipe(
       catchError((error: AxiosError) => {
